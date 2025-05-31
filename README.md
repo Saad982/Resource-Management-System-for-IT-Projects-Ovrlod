@@ -1,2 +1,10 @@
-# Resource-Management-System-for-IT-Projects-Ovrlod
-This Repository is responsible for the Programming Project.
+
+Problem : OVL is currently having trouble running its internal operations. Effectively allocating workloads, determining which resources are available, and comprehending the current tasks of each team member are all challenges facing project managers. Because of disjointed tools and manual procedures, the business is facing:
+
+	Employee task distribution that is out of balance
+	Limited insight into the distribution of work
+	Coordination of team assignments is difficult.
+	Project delivery delays
+
+
+Scope of Project : The proposed system for OVL Private Limited is a Resource Allocation Management System integrating three key modules: Resource Allocation, Timesheet Management, and Project Management. It will help project managers assign tasks efficiently, track employee workload, log work hours, and monitor project progress in real time. This system aims to streamline internal operations, reduce resource conflicts, and improve project delivery
