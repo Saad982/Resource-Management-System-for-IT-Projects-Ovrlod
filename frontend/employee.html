@@ -24,6 +24,16 @@
         <input type="text" id="role" class="form-control" placeholder="e.g. Developer" required />
       </div>
 
+      <div class="mb-3">
+        <label for="role" class="form-label">Phone</label>
+        <input type="text" id="phone" class="form-control" placeholder="+353 0679..." required />
+      </div>
+
+       <div class="mb-3">
+        <label for="role" class="form-label">email</label>
+        <input type="text" id="email" class="form-control" placeholder="e.g. alice@gmail.com" required />
+      </div>
+
       <button type="submit" class="btn btn-primary" id="submitBtn">Add Employee</button>
       <button type="button" class="btn btn-secondary" id="cancelBtn" style="display:none;">Cancel</button>
     </form>
@@ -35,6 +45,9 @@
         <tr>
           <th>Name</th>
           <th>Role</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody id="employeeTableBody">
