@@ -70,7 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const row = document.createElement('tr');
         row.innerHTML = `<td>${emp.Name}</td><td>${emp.Role}</td><td>${emp.Phone}</td><td>${emp.Email}</td> <td>
       <button class="btn btn-sm btn-warning edit-btn" data-id="${emp.Id}">Edit</button>
-    </td>`;
+    </td><td>${emp.Name}</td><td>${emp.Role}</td><td>${emp.Phone}</td><td>${emp.Email}</td>`;
+;
         tableBody.appendChild(row);
       });
     
