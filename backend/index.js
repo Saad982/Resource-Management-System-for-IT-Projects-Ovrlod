@@ -75,6 +75,22 @@ app.put('/api/employees/:id', async (req, res) => {
   }
 });
 
+// DELETE: Delete employee
+app.delete('/api/employees/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const pool = await sql.connect(config);
+    await pool.request()
+      .input('id', sql.Int, id)
+      .query('DELETE FROM Employee WHERE Id = @id');
+
+    res.json({ message: 'Employee deleted successfully' });
+  } catch (err) {
+    console.error('❌ Error deleting employee:', err);
+    res.status(500).json({ error: 'Failed to delete employee' });
+  }
+});
 
 // Serve employee.html manually first
 app.get('/', (req, res) => {
