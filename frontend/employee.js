@@ -95,11 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('cancelBtn').style.display = 'inline-block';
   });
 });
-    } catch (err) {
-      console.error('Error loading employees:', err);
-    }
-  }
-});
 
 //ADding Delete Functionality for employee to delete 
 document.querySelectorAll('.delete-btn').forEach(button => {
@@ -123,3 +118,11 @@ document.querySelectorAll('.delete-btn').forEach(button => {
     }
   });
 });
+
+
+    } catch (err) {
+      console.error('Error loading employees:', err);
+    }
+  }
+});
+
