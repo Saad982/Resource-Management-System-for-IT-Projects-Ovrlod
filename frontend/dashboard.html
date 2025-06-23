@@ -2,21 +2,77 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Resource Allocation Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <title>Dashboard | Resource Allocation System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles/style.css" />
 </head>
-<body class="bg-light">
-  <div class="container mt-5">
-    <h2 class="mb-4">🏠 Resource Allocation System - Dashboard</h2>
+<body>
 
-    <div class="list-group">
-      <a href="employee.html" class="list-group-item list-group-item-action">👨‍💼 Employee Management</a>
-      <a href="projects.html" class="list-group-item list-group-item-action">📁 Project Management</a>
-      <a href="allocation.html" class="list-group-item list-group-item-action">🔗 Resource Allocation</a>
-      <a href="availability.html" class="list-group-item list-group-item-action">📊 Availability Dashboard</a>
-      <a href="skills.html" class="list-group-item list-group-item-action">🧠 Skills Management</a>
-      <a href="reports.html" class="list-group-item list-group-item-action">📄 Reporting & Export</a>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm px-4 py-2">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold text-primary" href="dashboard.html">📊 Resource Allocation</a>
+      <div class="ms-auto">
+        <button id="logoutBtn" class="btn btn-outline-primary btn-sm">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container py-5">
+    <h2 class="mb-4 text-center">Welcome to the Dashboard</h2>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <a href="employee.html" class="card link-card text-center shadow-sm p-4">
+          <div class="card-body">
+            <h5 class="card-title">👥 Employee Management</h5>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="projects.html" class="card link-card text-center shadow-sm p-4">
+          <div class="card-body">
+            <h5 class="card-title">📁 Project Management</h5>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="allocation.html" class="card link-card text-center shadow-sm p-4">
+          <div class="card-body">
+            <h5 class="card-title">🔗 Resource Allocation</h5>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="availability.html" class="card link-card text-center shadow-sm p-4">
+          <div class="card-body">
+            <h5 class="card-title">📊 Availability Dashboard</h5>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="skills.html" class="card link-card text-center shadow-sm p-4">
+          <div class="card-body">
+            <h5 class="card-title">🧠 Skills Management</h5>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="reports.html" class="card link-card text-center shadow-sm p-4">
+          <div class="card-body">
+            <h5 class="card-title">📄 Reporting & Export</h5>
+          </div>
+        </a>
+      </div>
     </div>
   </div>
+
+  <script>
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      alert('Logged out!');
+      window.location.href = 'login.html';
+    });
+  </script>
 </body>
 </html>

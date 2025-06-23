@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
       employees.forEach(emp => {
         const row = document.createElement('tr');
         row.innerHTML = `<td>${emp.Name}</td><td>${emp.Role}</td><td>${emp.Phone}</td><td>${emp.Email}</td> <td>
-      <button class="btn btn-sm btn-warning edit-btn" data-id="${emp.Id}">Edit</button><button class="btn btn-sm btn-danger delete-btn ml-5" data-id="${emp.Id}">Delete</button>
+      <button class="btn btn-sm btn-warning edit-btn me-2" data-id="${emp.Id}">Edit</button><button class="btn btn-sm btn-danger delete-btn ml-5" data-id="${emp.Id}">Delete</button>
     </td>`;
         tableBody.appendChild(row);
       });
