@@ -118,6 +118,92 @@ app.delete('/api/employees/:id', async (req, res) => {
   }
 });
 
+
+//Here is the Work for Projects Related Api
+
+// ➕ Add Project
+app.post('/api/projects', async (req, res) => {
+  const { projectName, client, startDate, endDate, status } = req.body;
+
+  try {
+    const pool = await sql.connect(config);
+    await pool.request()
+      .input('projectName', sql.NVarChar, projectName)
+      .input('client', sql.NVarChar, client)
+      .input('startDate', sql.Date, startDate)
+      .input('endDate', sql.Date, endDate)
+      .input('status', sql.NVarChar, status)
+      .query(`
+        INSERT INTO Project (ProjectName, Client, StartDate, EndDate, Status)
+        VALUES (@projectName, @client, @startDate, @endDate, @status)
+      `);
+
+    res.status(201).json({ message: 'Project added successfully' });
+  } catch (err) {
+    console.error('Error adding project:', err);
+    res.status(500).json({ error: 'Failed to add project' });
+  }
+});
+
+// 📥 Get All Projects
+app.get('/api/projects', async (req, res) => {
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool.request().query('SELECT * FROM Project');
+    res.json(result.recordset);
+  } catch (err) {
+    console.error('Error fetching projects:', err);
+    res.status(500).json({ error: 'Failed to fetch projects' });
+  }
+});
+
+// 🖊️ Update Project
+app.put('/api/projects/:id', async (req, res) => {
+  const { id } = req.params;
+  const { projectName, client, startDate, endDate, status } = req.body;
+
+  try {
+    const pool = await sql.connect(config);
+    await pool.request()
+      .input('id', sql.Int, id)
+      .input('projectName', sql.NVarChar, projectName)
+      .input('client', sql.NVarChar, client)
+      .input('startDate', sql.Date, startDate)
+      .input('endDate', sql.Date, endDate)
+      .input('status', sql.NVarChar, status)
+      .query(`
+        UPDATE Project
+        SET ProjectName = @projectName, Client = @client,
+            StartDate = @startDate, EndDate = @endDate, Status = @status
+        WHERE Id = @id
+      `);
+
+    res.json({ message: 'Project updated successfully' });
+  } catch (err) {
+    console.error('Error updating project:', err);
+    res.status(500).json({ error: 'Failed to update project' });
+  }
+});
+
+// ❌ Delete Project
+app.delete('/api/projects/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const pool = await sql.connect(config);
+    await pool.request()
+      .input('id', sql.Int, id)
+      .query('DELETE FROM Project WHERE Id = @id');
+
+    res.json({ message: 'Project deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting project:', err);
+    res.status(500).json({ error: 'Failed to delete project' });
+  }
+});
+
+
+
 // Serve employee.html manually first
 app.get('/', (req, res) => {
   console.log('📄 Serving employee.html');
