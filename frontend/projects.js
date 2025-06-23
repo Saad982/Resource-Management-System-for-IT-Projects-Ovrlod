@@ -12,17 +12,16 @@ const projectTableBody = document.getElementById('projectTableBody');
 
 const apiUrl = '/api/projects';
 
-// Fetch and display all projects
+let projects = []; 
+
 async function loadProjects() {
   try {
     const res = await fetch(apiUrl);
-    const projects = await res.json();
+    projects = await res.json();
 
     projectTableBody.innerHTML = '';
-
     projects.forEach(project => {
       const tr = document.createElement('tr');
-
       tr.innerHTML = `
         <td>${project.ProjectName}</td>
         <td>${project.Client}</td>
@@ -34,7 +33,6 @@ async function loadProjects() {
           <button class="btn btn-sm btn-danger delete-btn" data-id="${project.Id}">Delete</button>
         </td>
       `;
-
       projectTableBody.appendChild(tr);
     });
   } catch (error) {
@@ -97,26 +95,22 @@ projectForm.addEventListener('submit', async e => {
 
 // Handle click events on table for Edit and Delete
 projectTableBody.addEventListener('click', async e => {
+  const id = e.target.dataset.id;
+
   if (e.target.classList.contains('edit-btn')) {
-    const id = e.target.dataset.id;
-
-    try {
-      const res = await fetch(`${apiUrl}/${id}`);
-      if (!res.ok) throw new Error('Failed to fetch project details');
-      const project = await res.json();
-
-      projectIdInput.value = project.Id;
-      projectNameInput.value = project.ProjectName;
-      clientInput.value = project.Client;
-      startDateInput.value = project.StartDate.split('T')[0]; // format YYYY-MM-DD
-      endDateInput.value = project.EndDate.split('T')[0];
-      statusSelect.value = project.Status;
-
-      cancelBtn.style.display = 'inline-block';
-    } catch (error) {
-      alert(error.message);
-      console.error(error);
+    const project = projects.find(p => p.Id == id);
+    if (!project) {
+      alert('Project not found');
+      return;
     }
+
+    projectIdInput.value = project.Id;
+    projectNameInput.value = project.ProjectName;
+    clientInput.value = project.Client;
+    startDateInput.value = project.StartDate.split('T')[0];
+    endDateInput.value = project.EndDate.split('T')[0];
+    statusSelect.value = project.Status;
+    cancelBtn.style.display = 'inline-block';
   }
 
   if (e.target.classList.contains('delete-btn')) {
