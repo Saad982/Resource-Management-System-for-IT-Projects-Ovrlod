@@ -16,6 +16,32 @@ const config = {
   connectionString: 'Driver={ODBC Driver 17 for SQL Server};Server=localhost\\SQLEXPRESS;Database=Resource Allocation System;Trusted_Connection=Yes;'
 };
 
+// POST: User Login
+app.post('/api/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool.request()
+      .input('username', sql.NVarChar, username)
+      .query('SELECT * FROM Users WHERE Username = @username');
+
+    const user = result.recordset[0];
+
+    if (!user || user.Password !== password) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    // Optional: return role for future use
+    res.json({ message: 'Login successful', user: { id: user.Id, role: user.Role } });
+
+  } catch (err) {
+    console.error('❌ Error during login:', err);
+    res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+
 // POST: Add new employee
 app.post('/api/employees', async (req, res) => {
   const { name, role,phone,email } = req.body;
@@ -95,7 +121,7 @@ app.delete('/api/employees/:id', async (req, res) => {
 // Serve employee.html manually first
 app.get('/', (req, res) => {
   console.log('📄 Serving employee.html');
-  res.sendFile(path.join(__dirname, '../frontend/employee.html'));
+  res.sendFile(path.join(__dirname, '../frontend/login.html'));
 });
 
 // Then serve other static files
