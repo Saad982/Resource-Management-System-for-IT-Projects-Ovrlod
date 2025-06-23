@@ -1,128 +1,143 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('employeeForm');
-  const nameInput = document.getElementById('name');
-  const roleInput = document.getElementById('role');
-  const phoneInput = document.getElementById('phone');
-  const emailInput = document.getElementById('email');
-  const tableBody = document.getElementById('employeeTableBody');
+  const form = document.getElementById('projectForm');
+  const projectIdInput = document.getElementById('projectId');
+  const projectNameInput = document.getElementById('projectName');
+  const clientInput = document.getElementById('client');
+  const startDateInput = document.getElementById('startDate');
+  const endDateInput = document.getElementById('endDate');
+  const statusSelect = document.getElementById('status');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const tableBody = document.getElementById('projectTableBody');
+  const submitBtn = form.querySelector('button[type="submit"]');
 
-  // Load existing employees on page load
-  fetchEmployees();
+  const apiUrl = '/api/projects';
 
-  form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const id = document.getElementById('employeeId').value;
-  const name = nameInput.value.trim();
-  const role = roleInput.value.trim();
-  const phone = phoneInput.value.trim();
-  const email = emailInput.value.trim();
-
-  if (!name || !role) return;
-
-  const payload = { name, role, phone, email };
-
-  try {
-    let res, data;
-
-    if (id) {
-      // 🔁 Update existing employee
-      res = await fetch(`/api/employees/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      data = await res.json();
-    } else {
-      // ➕ Add new employee
-      res = await fetch('/api/employees', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      data = await res.json();
-    }
-
-    if (res.ok) {
-      // Reset form
-      form.reset();
-      document.getElementById('employeeId').value = '';
-      document.getElementById('submitBtn').textContent = 'Add Employee';
-      document.getElementById('cancelBtn').style.display = 'none';
-      fetchEmployees();
-      alert(id ? 'Employee updated successfully' : 'Employee added successfully');
-    } else {
-      alert(data.error || 'Operation failed');
-    }
-  } catch (err) {
-    console.error('Error:', err);
-  }
-});
-
-
-  async function fetchEmployees() {
+  // Load projects and render
+  async function fetchProjects() {
     try {
-      const res = await fetch('/api/employees');
-      const employees = await res.json();
+      const res = await fetch(apiUrl);
+      if (!res.ok) throw new Error('Failed to load projects');
+      const projects = await res.json();
 
-      tableBody.innerHTML = ''; // Clear existing rows
+      tableBody.innerHTML = '';
 
-      employees.forEach(emp => {
-        const row = document.createElement('tr');
-        row.innerHTML = `<td>${emp.Name}</td><td>${emp.Role}</td><td>${emp.Phone}</td><td>${emp.Email}</td> <td>
-      <button class="btn btn-sm btn-warning edit-btn me-2" data-id="${emp.Id}">Edit</button><button class="btn btn-sm btn-danger delete-btn ml-5" data-id="${emp.Id}">Delete</button>
-    </td>`;
-        tableBody.appendChild(row);
+      projects.forEach(project => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${project.ProjectName}</td>
+          <td>${project.Client}</td>
+          <td>${new Date(project.StartDate).toLocaleDateString()}</td>
+          <td>${new Date(project.EndDate).toLocaleDateString()}</td>
+          <td>${project.Status}</td>
+          <td>
+            <button class="btn btn-sm btn-primary edit-btn me-2" data-id="${project.Id}">Edit</button>
+            <button class="btn btn-sm btn-danger delete-btn" data-id="${project.Id}">Delete</button>
+          </td>
+        `;
+        tableBody.appendChild(tr);
       });
-    
-    //Adding edit button logic
+
+      // Attach event listeners for Edit buttons
       document.querySelectorAll('.edit-btn').forEach(button => {
-  button.addEventListener('click', async () => {
-    const id = button.getAttribute('data-id');
+        button.addEventListener('click', () => {
+          const id = button.getAttribute('data-id');
+          // Find project from the already fetched list to avoid extra API call
+          const project = projects.find(p => p.Id == id);
+          if (!project) return;
 
-    // Fetch employee by ID (optional if already in JS)
-    const employee = employees.find(emp => emp.Id == id);
-    if (!employee) return;
+          projectIdInput.value = project.Id;
+          projectNameInput.value = project.ProjectName;
+          clientInput.value = project.Client;
+          startDateInput.value = project.StartDate.split('T')[0];
+          endDateInput.value = project.EndDate.split('T')[0];
+          statusSelect.value = project.Status;
 
-    // Populate form
-    document.getElementById('employeeId').value = employee.Id;
-    nameInput.value = employee.Name;
-    roleInput.value = employee.Role;
-    phoneInput.value = employee.Phone;
-    emailInput.value = employee.Email;
-
-    // Change button to Update
-    document.getElementById('submitBtn').textContent = 'Update Employee';
-    document.getElementById('cancelBtn').style.display = 'inline-block';
-  });
-});
-
-//ADding Delete Functionality for employee to delete 
-document.querySelectorAll('.delete-btn').forEach(button => {
-  button.addEventListener('click', async () => {
-    const id = button.getAttribute('data-id');
-    if (confirm('Are you sure you want to delete this employee?')) {
-      try {
-        const res = await fetch(`/api/employees/${id}`, {
-          method: 'DELETE'
+          submitBtn.textContent = 'Update Project';
+          cancelBtn.style.display = 'inline-block';
         });
+      });
 
-        if (res.ok) {
-          fetchEmployees(); // Refresh table
-          alert('Employee deleted successfully');
-        } else {
-          alert('Failed to delete employee');
-        }
-      } catch (err) {
-        console.error('Delete error:', err);
-      }
-    }
-  });
-});
-
+      // Attach event listeners for Delete buttons
+      document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', async () => {
+          const id = button.getAttribute('data-id');
+          if (confirm('Are you sure you want to delete this project?')) {
+            try {
+              const res = await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
+              if (!res.ok) throw new Error('Delete failed');
+              alert('Project deleted successfully');
+              fetchProjects();
+            } catch (err) {
+              alert(err.message);
+              console.error(err);
+            }
+          }
+        });
+      });
 
     } catch (err) {
-      console.error('Error loading employees:', err);
+      alert(err.message);
+      console.error(err);
     }
   }
-});
 
+  // Reset form
+  function resetForm() {
+    projectIdInput.value = '';
+    form.reset();
+    submitBtn.textContent = 'Add Project';
+    cancelBtn.style.display = 'none';
+  }
+
+  // Form submit handler (Add or Update)
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const projectData = {
+      projectName: projectNameInput.value.trim(),
+      client: clientInput.value.trim(),
+      startDate: startDateInput.value,
+      endDate: endDateInput.value,
+      status: statusSelect.value,
+    };
+
+    try {
+      let res;
+      if (projectIdInput.value) {
+        // Update existing
+        res = await fetch(`${apiUrl}/${projectIdInput.value}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(projectData),
+        });
+      } else {
+        // Add new
+        res = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(projectData),
+        });
+      }
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || 'Operation failed');
+      }
+
+      alert(projectIdInput.value ? 'Project updated successfully' : 'Project added successfully');
+      resetForm();
+      fetchProjects();
+    } catch (err) {
+      alert(err.message);
+      console.error(err);
+    }
+  });
+
+  // Cancel button handler
+  cancelBtn.addEventListener('click', () => {
+    resetForm();
+  });
+
+  // Initial fetch
+  fetchProjects();
+});
