@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let res, data;
 
     if (id) {
-      // 🔁 Update existing employee
+      //  Update existing employee
       res = await fetch(`/api/employees/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },

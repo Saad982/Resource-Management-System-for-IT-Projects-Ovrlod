@@ -36,7 +36,7 @@ app.post('/api/login', async (req, res) => {
     res.json({ message: 'Login successful', user: { id: user.Id, role: user.Role } });
 
   } catch (err) {
-    console.error('❌ Error during login:', err);
+    console.error('Error during login:', err);
     res.status(500).json({ error: 'Login failed' });
   }
 });
@@ -157,7 +157,7 @@ app.get('/api/projects', async (req, res) => {
   }
 });
 
-// 🖊️ Update Project
+// Update Project
 app.put('/api/projects/:id', async (req, res) => {
   const { id } = req.params;
   const { projectName, client, startDate, endDate, status } = req.body;
@@ -185,7 +185,7 @@ app.put('/api/projects/:id', async (req, res) => {
   }
 });
 
-// ❌ Delete Project
+//  Delete Project
 app.delete('/api/projects/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -215,5 +215,5 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Start server
 app.listen(port, () => {
-  console.log(`🚀 Server running at http://localhost:${port}`);
+  console.log(`Server running at http://localhost:${port}`);
 });
