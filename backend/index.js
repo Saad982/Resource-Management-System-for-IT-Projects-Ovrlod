@@ -121,7 +121,7 @@ app.delete('/api/employees/:id', async (req, res) => {
 
 //Here is the Work for Projects Related Api
 
-// ➕ Add Project
+//  Add Project
 app.post('/api/projects', async (req, res) => {
   const { projectName, client, startDate, endDate, status } = req.body;
 
@@ -145,7 +145,7 @@ app.post('/api/projects', async (req, res) => {
   }
 });
 
-// 📥 Get All Projects
+//  Get All Projects
 app.get('/api/projects', async (req, res) => {
   try {
     const pool = await sql.connect(config);
@@ -199,6 +199,68 @@ app.delete('/api/projects/:id', async (req, res) => {
   } catch (err) {
     console.error('Error deleting project:', err);
     res.status(500).json({ error: 'Failed to delete project' });
+  }
+});
+
+//Api's Started for Allocation Page
+
+// POST: Add resource allocation
+app.post('/api/allocations', async (req, res) => {
+  const { employeeId, projectId, role, startDate, endDate, allocationPercentage } = req.body;
+
+  try {
+    const pool = await sql.connect(config);
+
+    const overlapCheck = await pool.request()
+      .input('employeeId', sql.Int, employeeId)
+      .input('startDate', sql.Date, startDate)
+      .input('endDate', sql.Date, endDate)
+      .query(`
+        SELECT * FROM ResourceAllocation 
+        WHERE EmployeeId = @employeeId
+        AND (StartDate <= @endDate AND EndDate >= @startDate)
+      `);
+
+    if (overlapCheck.recordset.length > 0) {
+      return res.status(400).json({ error: 'Overlapping allocation found for this employee.' });
+    }
+
+    await pool.request()
+      .input('employeeId', sql.Int, employeeId)
+      .input('projectId', sql.Int, projectId)
+      .input('role', sql.NVarChar, role)
+      .input('startDate', sql.Date, startDate)
+      .input('endDate', sql.Date, endDate)
+      .input('allocationPercentage', sql.Int, allocationPercentage)
+      .query(`
+        INSERT INTO ResourceAllocation (EmployeeId, ProjectId, Role, StartDate, EndDate, AllocationPercentage)
+        VALUES (@employeeId, @projectId, @role, @startDate, @endDate, @allocationPercentage)
+      `);
+
+    res.status(201).json({ message: 'Allocation added successfully' });
+  } catch (err) {
+    console.error('Error inserting allocation:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// GET: All resource allocations
+app.get('/api/allocations', async (req, res) => {
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool.request().query(`
+      SELECT ra.Id, 
+             e.Name AS EmployeeName, 
+             p.ProjectName, 
+             ra.Role, ra.StartDate, ra.EndDate, ra.AllocationPercentage
+      FROM ResourceAllocation ra
+      JOIN Employee e ON ra.EmployeeId = e.Id
+      JOIN Project p ON ra.ProjectId = p.Id
+    `);
+    res.json(result.recordset);
+  } catch (err) {
+    console.error('Error fetching allocations:', err);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
