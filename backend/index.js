@@ -250,9 +250,13 @@ app.get('/api/allocations', async (req, res) => {
     const pool = await sql.connect(config);
     const result = await pool.request().query(`
       SELECT ra.Id, 
+             ra.EmployeeId,                              -- ✅ Add this line
              e.Name AS EmployeeName, 
              p.ProjectName, 
-             ra.Role, ra.StartDate, ra.EndDate, ra.AllocationPercentage
+             ra.Role, 
+             ra.StartDate, 
+             ra.EndDate, 
+             ra.AllocationPercentage
       FROM ResourceAllocation ra
       JOIN Employee e ON ra.EmployeeId = e.Id
       JOIN Project p ON ra.ProjectId = p.Id

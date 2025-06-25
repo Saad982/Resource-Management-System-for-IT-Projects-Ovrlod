@@ -4,12 +4,10 @@
   <meta charset="UTF-8" />
   <title>Availability Dashboard</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="styles/style.css" />
+   <link rel="stylesheet" href="styles/style.css" />
 </head>
 <body class="bg-light">
-
-  
-  <!-- Navigation Bar -->
+     <!-- Navigation Bar -->
   <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm px-4 py-2">
     <div class="container-fluid">
       <a class="navbar-brand fw-bold text-primary" href="dashboard.html">Resource Allocation</a>
@@ -19,43 +17,18 @@
       </div>
     </div>
   </nav>
- 
-<!-- Content -->
-  <div class="container mt-5">
-    <h2 class="text-center mb-4">Availability Dashboard</h2>
+  
+  <div class="container py-5">
+    <h2 class="mb-4 text-center">Availability Dashboard</h2>
 
     <div class="mb-3">
-      <label for="targetDate" class="form-label">Select Date to Check Availability:</label>
-      <input type="date" id="targetDate" class="form-control" />
+      <label for="checkDate" class="form-label">Select Date to Check Availability:</label>
+      <input type="date" id="checkDate" class="form-control" />
     </div>
 
-    <div class="row mt-4">
-      
-      <div class="row mt-4">
-      <div class="col-md-4">
-        <h5>Free (0%)</h5>
-        <ul class="list-group" id="freeList"></ul>
-      </div>
-      <div class="col-md-4">
-        <h5>Partially Allocated (1-99%)</h5>
-        <ul class="list-group" id="partialList"></ul>
-      </div>
-      <div class="col-md-4">
-        <h5>Fully Allocated (100%)</h5>
-        <ul class="list-group" id="fullList"></ul>
-      </div>
-    </div>
-
-    </div>
+    <div id="result" class="mt-4"></div>
   </div>
- 
- <script src="availability.js"></script>
-  <script>
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      alert('Logged out!');
-      window.location.href = 'login.html';
-    });
-  </script>
 
+  <script src="availability.js"></script>
 </body>
 </html>
