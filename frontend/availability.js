@@ -4,5 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const partialList = document.getElementById('partialList');
   const fullList = document.getElementById('fullList');
 
- 
+  targetDateInput.addEventListener('change', () => {
+    const selectedDate = targetDateInput.value;
+    if (selectedDate) {
+      console.log('Date Selected');
+    }
+  });
+
+  
 });
