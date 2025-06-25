@@ -264,8 +264,89 @@ app.get('/api/allocations', async (req, res) => {
   }
 });
 
+// GET: Get Allocation item by ID
+app.get('/api/allocations/:id', async (req, res) => {
+  const { id } = req.params;
 
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool.request()
+      .input('id', sql.Int, id)
+      .query(`
+        SELECT ra.Id, 
+               ra.EmployeeId,
+               ra.ProjectId,
+               ra.Role, 
+               ra.StartDate, 
+               ra.EndDate, 
+               ra.AllocationPercentage
+        FROM ResourceAllocation ra
+        WHERE ra.Id = @id
+      `);
 
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ error: 'Allocation not found' });
+    }
+
+    res.json(result.recordset[0]);
+  } catch (err) {
+    console.error('Error fetching allocation:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// DELETE: Remove allocation
+app.delete('/api/allocations/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const pool = await sql.connect(config);
+    await pool.request().input('id', sql.Int, id).query(`
+      DELETE FROM ResourceAllocation WHERE Id = @id
+    `);
+
+    res.json({ message: 'Allocation deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting allocation:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// PUT: Update allocation
+app.put('/api/allocations/:id', async (req, res) => {
+  const { id } = req.params;
+  const { employeeId, projectId, role, startDate, endDate, allocationPercentage } = req.body;
+
+  try {
+    const pool = await sql.connect(config);
+
+    // Optional: Overlap check again here
+
+    await pool.request()
+      .input('id', sql.Int, id)
+      .input('employeeId', sql.Int, employeeId)
+      .input('projectId', sql.Int, projectId)
+      .input('role', sql.NVarChar, role)
+      .input('startDate', sql.Date, startDate)
+      .input('endDate', sql.Date, endDate)
+      .input('allocationPercentage', sql.Int, allocationPercentage)
+      .query(`
+        UPDATE ResourceAllocation
+        SET EmployeeId = @employeeId,
+            ProjectId = @projectId,
+            Role = @role,
+            StartDate = @startDate,
+            EndDate = @endDate,
+            AllocationPercentage = @allocationPercentage
+        WHERE Id = @id
+      `);
+
+    res.json({ message: 'Allocation updated successfully' });
+  } catch (err) {
+    console.error('Error updating allocation:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 // Serve employee.html manually first
 app.get('/', (req, res) => {
   console.log('📄 Serving employee.html');
