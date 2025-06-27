@@ -19,9 +19,27 @@
 
       return await res.json();
     }
-    alert('Success to fetch allocation data');
+    
     fetchAllocations();
   
+
+ const ctx = document.getElementById('allocationChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Dummy Project A', 'Dummy Project B'],
+      datasets: [{
+        label: 'Allocation %',
+        data: [40, 60],
+        backgroundColor: 'rgba(54, 162, 235, 0.6)'
+      }]
+    },
+    options: {
+      scales: { y: { beginAtZero: true, max: 100 } }
+    }
+  });
+
+
   </script>
 </body>
 </html>
