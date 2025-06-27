@@ -9,6 +9,19 @@
   <h2>Project Allocation Summary</h2>
   <canvas id="allocationChart" width="600" height="400"></canvas>
 
- 
+  <script>
+    async function fetchAllocations() {
+      const res = await fetch('/api/allocations');
+      if (!res.ok) {
+        alert('Failed to fetch allocation data');
+        return [];
+      }
+
+      return await res.json();
+    }
+    alert('Success to fetch allocation data');
+    fetchAllocations();
+  
+  </script>
 </body>
 </html>
