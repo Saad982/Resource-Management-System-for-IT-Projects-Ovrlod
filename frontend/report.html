@@ -39,7 +39,20 @@
     }
   });
 
+function processAllocationData(data) {
+  const allocationByProject = {};
+  data.forEach(item => {
+    if (!allocationByProject[item.ProjectName]) {
+      allocationByProject[item.ProjectName] = 0;
+    }
+    allocationByProject[item.ProjectName] += item.AllocationPercentage;
+  });
 
+  const labels = Object.keys(allocationByProject);
+  const values = labels.map(label => allocationByProject[label]);
+
+  return { labels, values };
+}
   </script>
 </body>
 </html>
