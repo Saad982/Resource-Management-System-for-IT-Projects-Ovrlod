@@ -23,21 +23,33 @@
     fetchAllocations();
   
 
- const ctx = document.getElementById('allocationChart').getContext('2d');
+ async function drawChart() {
+  const allocationData = await fetchAllocations();
+  const { labels, values } = processAllocationData(allocationData);
+
+  const ctx = document.getElementById('allocationChart').getContext('2d');
   new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['Dummy Project A', 'Dummy Project B'],
+      labels: labels,
       datasets: [{
-        label: 'Allocation %',
-        data: [40, 60],
-        backgroundColor: 'rgba(54, 162, 235, 0.6)'
+        label: 'Total Allocation % per Project',
+        data: values,
+        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1
       }]
     },
     options: {
-      scales: { y: { beginAtZero: true, max: 100 } }
+      scales: {
+        y: { beginAtZero: true, max: 100 }
+      }
     }
   });
+}
+
+drawChart();
+
 
 function processAllocationData(data) {
   const allocationByProject = {};
