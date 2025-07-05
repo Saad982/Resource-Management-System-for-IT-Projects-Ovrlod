@@ -21,6 +21,6 @@ This project uses [Chart.js](https://www.chartjs.org/) to visualize project-wise
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-Site Deployed: http://52.210.48.158/
+Site Deployed: http://18.201.40.110/
 username:admin
 Password:admin123
