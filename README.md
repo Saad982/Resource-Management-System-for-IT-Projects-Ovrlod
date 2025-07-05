@@ -20,3 +20,7 @@ This project uses [Chart.js](https://www.chartjs.org/) to visualize project-wise
 - File: `report.html`
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+Site Deployed: http://52.210.48.158/
+username:admin
+Password:admin123
