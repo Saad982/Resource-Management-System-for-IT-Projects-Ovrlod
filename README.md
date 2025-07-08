@@ -10,6 +10,9 @@ Problem : OVL is currently having trouble running its internal operations. Effec
 Scope of Project : The proposed system for OVL Private Limited is a Resource Allocation Management System integrating three key modules: Resource Allocation, Timesheet Management, and Project Management. It will help project managers assign tasks efficiently, track employee workload, log work hours, and monitor project progress in real time. This system aims to streamline internal operations, reduce resource conflicts, and improve project delivery
 
 
+Tech used : HTML ,CSS Bootstrap 
+Database : SQL
+
 Chart.js Integration
 
 This project uses [Chart.js](https://www.chartjs.org/) to visualize project-wise resource allocations.
@@ -24,3 +27,5 @@ This project uses [Chart.js](https://www.chartjs.org/) to visualize project-wise
 Site Deployed: http://18.201.40.110/
 username:admin
 Password:admin123
+
+
