@@ -361,13 +361,16 @@ app.get('/', (req, res) => {
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Start server
-// app.listen(port, () => {
-//   console.log(`Server running at http://localhost:${port}`);
-// });
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
 
-module.exports = app; // 👈 Export the app
+
+// //USed from chatGPT because was my First time use JEST
+// if (require.main === module) {
+//   app.listen(PORT, () => {
+//     console.log(`Server running on port ${PORT}`);
+//   });
+// }
+
+// module.exports = app; // 👈 Export the app
