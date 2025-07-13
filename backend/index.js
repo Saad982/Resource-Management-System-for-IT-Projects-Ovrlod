@@ -70,7 +70,7 @@ app.get('/api/employees', async (req, res) => {
     const result = await pool.request().query('SELECT Id,Name, Role,Phone,Email FROM Employee');
     res.json(result.recordset); // return array of employees
   } catch (err) {
-    console.error('❌ Error fetching employees:', err);
+    console.error('Error fetching employees:', err);
     res.status(500).json({ error: 'Failed to fetch employees' });
   }
 });
@@ -96,7 +96,7 @@ app.put('/api/employees/:id', async (req, res) => {
 
     res.json({ message: 'Employee updated successfully' });
   } catch (err) {
-    console.error('❌ Error updating employee:', err);
+    console.error('Error updating employee:', err);
     res.status(500).json({ error: 'Failed to update employee' });
   }
 });
@@ -113,7 +113,7 @@ app.delete('/api/employees/:id', async (req, res) => {
 
     res.json({ message: 'Employee deleted successfully' });
   } catch (err) {
-    console.error('❌ Error deleting employee:', err);
+    console.error('Error deleting employee:', err);
     res.status(500).json({ error: 'Failed to delete employee' });
   }
 });
@@ -361,6 +361,13 @@ app.get('/', (req, res) => {
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Start server
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server running at http://localhost:${port}`);
+// });
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+module.exports = app; // 👈 Export the app
