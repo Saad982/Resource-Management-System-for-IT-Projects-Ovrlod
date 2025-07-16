@@ -1,6 +1,9 @@
 const request = require('supertest');
 const app = require('../index'); // importing from backend/index.js
 //USed from ChtGPT because i have never used jest before so it was my first time to use so i too help for adding emploee chunk code is taken from GPT
+//Chatgpt Link
+//https://chatgpt.com/share/6877c982-59d8-8002-96fd-a5f51f0d19d7
+
 describe('POST /api/employees', () => {
   it('should add a new employee and return 201', async () => {
     const newEmployee = {

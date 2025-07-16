@@ -1,5 +1,6 @@
 
 // Code taken by chatgpt to make connection
+// here is the link https://chatgpt.com/share/6877cd0c-dc24-8002-8846-ec5c00874298
 const express = require('express');
 const sql = require('mssql/msnodesqlv8');
 const path = require('path');
@@ -100,7 +101,7 @@ app.put('/api/employees/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to update employee' });
   }
 });
-
+//ChatGpt Link where i got help to delete Employee https://chatgpt.com/share/6877cbb6-b7cc-8002-b000-53fcfcd30dbb
 // DELETE: Delete employee
 app.delete('/api/employees/:id', async (req, res) => {
   const { id } = req.params;
@@ -365,7 +366,7 @@ app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
 
-
+//https://chatgpt.com/share/6877c982-59d8-8002-96fd-a5f51f0d19d7
 // //USed from chatGPT because was my First time use JEST
 // if (require.main === module) {
 //   app.listen(PORT, () => {
